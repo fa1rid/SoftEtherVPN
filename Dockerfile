@@ -7,7 +7,7 @@ RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VE
     && tar -x -C /usr/local/src/ -f v${BUILD_VERSION}.tar.gz \
     && rm v${BUILD_VERSION}.tar.gz
 
-FROM alpine:3.16 as build
+FROM alpine:3.17 as build
 
 COPY --from=prep /usr/local/src /usr/local/src
 
