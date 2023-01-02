@@ -1,19 +1,12 @@
-FROM alpine:3.17 as prep
-
+FROM alpine:3.17 as build
+ENV LANG=en_US.UTF-8
 ENV BUILD_VERSION=4.41-9782-beta
 
-RUN wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VERSION}.tar.gz \
+RUN apk add -U build-base ncurses-dev openssl-dev readline-dev zip zlib-dev \
+    && wget https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/archive/v${BUILD_VERSION}.tar.gz \
     && mkdir -p /usr/local/src \
     && tar -x -C /usr/local/src/ -f v${BUILD_VERSION}.tar.gz \
-    && rm v${BUILD_VERSION}.tar.gz
-
-FROM alpine:3.17 as build
-
-COPY --from=prep /usr/local/src /usr/local/src
-
-ENV LANG=en_US.UTF-8
-
-RUN apk add -U build-base ncurses-dev openssl-dev readline-dev zip zlib-dev \
+    && rm v${BUILD_VERSION}.tar.gz \
     && cd /usr/local/src/SoftEtherVPN_Stable-* \
     && ./configure \
     && make \
